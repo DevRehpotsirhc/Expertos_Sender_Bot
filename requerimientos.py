@@ -1,9 +1,9 @@
 import tkinter as tk
 
-def show_info(root):
+def show_reque(root):
     win = tk.Toplevel(root)
     win.title("Programar tareas")
-    win.geometry("420x450")
+    win.geometry("420x300")
     win.resizable(False, False)
 
     # Centrar ventana
@@ -17,20 +17,17 @@ def show_info(root):
 
     tk.Label(
         frame,
-        text="Información",
+        text="Requerimientos",
         font=("Arial", 16, "bold"),
     ).pack(pady=(0, 10))
 
     texto = (
-        "Esta aplicación permite:\n\n"
-        "- Agregar múltiples tareas\n"
-        "- Seleccionar un archivo para ejecutar en la terminal\n"
-        "- Elegir hora exacta de ejecución\n"
-        "- Definir correos de envío\n\n"
-        "Es importante que la ruta del archivo, generado\n"
-        "con el script, se imprima sola al finalizar, esto\n"
-        "para poder extraer el mismo y enviarlo por correo.\n"
-        "Ej: /home/ruta/archivo.txt"
+        "Para el correcto funcionamiento del\n"
+        "sistema, siga estos pasos:\n\n"
+        " - Añada la clave de aplicación (correo) al entorno\n"
+        " - Añada el correo vinculado a la clave al entorno\n"
+        " - Asigne las tareas con 1 min de diferencia al menos\n"
+        " - Asegurate de tener crontab enrutado al sistema\n"
     )
 
     tk.Label(
@@ -46,10 +43,3 @@ def show_info(root):
         command=win.destroy,
         width=12
     ).pack(pady=10)
-
-    tk.Label(
-        frame,
-        text="Versión 1.1.0  •  Desarrollado por Christopher Aponte",
-        font=("Arial", 9),
-        fg="gray",
-    ).pack(pady=(10, 0))

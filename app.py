@@ -1,6 +1,8 @@
 from task import TaskItem
 import tkinter as tk
+from requerimientos import show_reque
 from info import show_info
+from entorno import EnvWindow
 from tkinter import messagebox
 import json
 import os
@@ -18,6 +20,12 @@ class App:
         header.pack(fill="x")
 
         tk.Button(header, text="info", command=lambda: show_info(self.root))\
+            .pack(side="right", padx=10)
+        
+        tk.Button(header, text="requerimientos", command=lambda: show_reque(self.root))\
+            .pack(side="right", padx=10)
+        
+        tk.Button(header, text="entorno", command=lambda: EnvWindow(self.root))\
             .pack(side="right", padx=10)
 
         # Contenedor de tareas
