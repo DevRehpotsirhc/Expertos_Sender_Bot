@@ -1,6 +1,18 @@
 import tkinter as tk
 from app import App
+import subprocess
+import os
+from utils import resource_path, base_path
 
+
+
+def configurar_cron():
+    script = base_path("setup_cron.sh")
+
+    if os.path.isfile(script):
+        subprocess.run(["bash", script], check=False)
+
+configurar_cron()
 
 root = tk.Tk()
 root.geometry("650x600")

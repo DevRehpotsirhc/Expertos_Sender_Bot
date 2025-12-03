@@ -5,16 +5,17 @@ import subprocess
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime
+import os
+from utils import resource_path, base_path
 
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(base_path(".env"))
+DATA_FILE = base_path("data.json")
 
-load_dotenv(os.path.join(BASE_DIR, ".env"))
-DATA_FILE = os.path.join(BASE_DIR, "data.json")
 CORREO = os.environ.get("CORREO")
 PASS_APP = os.environ.get("PASS_APP")
-
+print(f"{DATA_FILE}\n\n{CORREO}\n\n{PASS_APP}")
 
 
 def ejecutar_script(ruta):

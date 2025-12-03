@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 import os
+from utils import resource_path, base_path
 
-ENV_FILE = ".env"
+ENV_FILE = base_path(".env")
+print(ENV_FILE)
 
 class EnvVariableItem:
     def __init__(self, master, data=None, on_delete=None):

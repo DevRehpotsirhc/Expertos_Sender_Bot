@@ -6,8 +6,11 @@ from entorno import EnvWindow
 from tkinter import messagebox
 import json
 import os
+from utils import resource_path, base_path
 
-CONFIG_FILE = "data.json"
+
+CONFIG_FILE = base_path("data.json")
+print(CONFIG_FILE)
 
 class App:
     def __init__(self, root):

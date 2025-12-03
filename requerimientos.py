@@ -3,7 +3,7 @@ import tkinter as tk
 def show_reque(root):
     win = tk.Toplevel(root)
     win.title("Programar tareas")
-    win.geometry("420x300")
+    win.geometry("420x400")
     win.resizable(False, False)
 
     # Centrar ventana
@@ -27,7 +27,9 @@ def show_reque(root):
         " - Añada la clave de aplicación (correo) al entorno\n"
         " - Añada el correo vinculado a la clave al entorno\n"
         " - Asigne las tareas con 1 min de diferencia al menos\n"
-        " - Asegurate de tener crontab enrutado al sistema\n"
+        " - Asegurate de tener crontab enrutado al sistema\n\n"
+        "Las variables de entorno para el correo y clave deben\n"
+        "llamarse CORREO y PASS_APP respectivamente"
     )
 
     tk.Label(
