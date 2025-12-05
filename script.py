@@ -25,7 +25,7 @@ def enviar_correo(destinatarios, archivos_generados):
     msg = EmailMessage()
     msg["From"] = CORREO
     msg["To"] = ", ".join(destinatarios)
-    msg["Subject"] = "Archivos generados"
+    msg["Subject"] = "Reporte de Servicios - Archivos generados"
 
     for archivo in archivos_generados:
         with open(archivo, "rb") as f:
