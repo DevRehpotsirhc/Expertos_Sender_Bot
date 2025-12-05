@@ -85,7 +85,8 @@ class App:
         for task in self.tasks:
             info = task.get_data()
 
-            if not info["archivo"] or not info["correos"]:
+            # Validar listas vacías
+            if len(info["archivos"]) == 0 or len(info["correos"]) == 0 or len(info["horas"]) == 0:
                 incompletas += 1
                 continue
 
@@ -97,14 +98,16 @@ class App:
         if incompletas > 0:
             messagebox.showwarning(
                 "Advertencia",
-                "Algunas tareas no se guardaron porque les falta información (archivo/correo)."
+                "Algunas tareas no se guardaron porque les falta información (archivos/horas/correos)."
             )
 
         messagebox.showinfo(
             "Guardado",
             "Los datos se han guardado exitosamente"
         )
+
         print("Guardado:", data)
+
 
     def load_tasks(self):
         if os.path.exists(CONFIG_FILE):

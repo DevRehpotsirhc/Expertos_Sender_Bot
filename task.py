@@ -16,19 +16,13 @@ class TaskItem:
             .grid(row=0, column=2)
 
         # ----- Hora -----
-        tk.Label(self.frame, text="Hora:").grid(row=1, column=0, sticky="w")
+        tk.Label(self.frame, text="Hora(s):").grid(row=1, column=0, sticky="w")
 
-        horas = [f"{h:02d}" for h in range(24)]
-        minutos = [f"{m:02d}" for m in range(60)]
-
-        self.combo_hora = ttk.Combobox(self.frame, values=horas, width=5, state="readonly")
-        self.combo_hora.grid(row=1, column=1, sticky="w")
-
-        self.combo_minuto = ttk.Combobox(self.frame, values=minutos, width=5, state="readonly")
-        self.combo_minuto.grid(row=1, column=1, padx=60, sticky="w")
+        self.entry_horas = tk.Entry(self.frame, width=20)
+        self.entry_horas.grid(row=1, column=1, sticky="w")
 
         # ----- Correos -----
-        tk.Label(self.frame, text="Correos destino:").grid(row=2, column=0, sticky="w")
+        tk.Label(self.frame, text="Correos:").grid(row=2, column=0, sticky="w")
         self.entry_correos = tk.Entry(self.frame, width=30)
         self.entry_correos.grid(row=2, column=1)
 
@@ -36,36 +30,41 @@ class TaskItem:
         tk.Button(self.frame, text="X", fg="red", command=self.delete)\
             .grid(row=0, column=3, rowspan=3, padx=10)
 
-        # Cargar datos si vienen de archivo
         if data:
-            self.entry_archivo.insert(0, data["archivo"])
-            h, m = data["hora"].split(":")
-            self.combo_hora.set(h)
-            self.combo_minuto.set(m)
+            self.entry_archivo.insert(0, ", ".join(data["archivos"]) if isinstance(data["archivos"], list) else data["archivos"])
 
-            # Correos: si viene lista → convertir a string con comas
+            # Horas (lista o string)
+            if isinstance(data["horas"], list):
+                self.entry_horas.insert(0, ", ".join(data["horas"]))
+            else:
+                self.entry_horas.insert(0, data["horas"])
+
+            # Correos
             if isinstance(data["correos"], list):
                 self.entry_correos.insert(0, ", ".join(data["correos"]))
             else:
                 self.entry_correos.insert(0, data["correos"])
-        else:
-            self.combo_hora.set("00")
-            self.combo_minuto.set("00")
+
+
 
     def seleccionar_archivo(self):
-        ruta = filedialog.askopenfilename()
-        if ruta:
+        rutas = filedialog.askopenfilenames()
+        if rutas:
             self.entry_archivo.delete(0, tk.END)
-            self.entry_archivo.insert(0, ruta)
+            self.entry_archivo.insert(0, ", ".join(rutas))
+
 
     def get_data(self):
+        archivos = [a.strip() for a in self.entry_archivo.get().split(",") if a.strip()]
+        horas = [h.strip() for h in self.entry_horas.get().split(",") if h.strip()]
         correos = [c.strip() for c in self.entry_correos.get().split(",") if c.strip()]
 
         return {
-            "archivo": self.entry_archivo.get(),
-            "hora": f"{self.combo_hora.get()}:{self.combo_minuto.get()}",
+            "archivos": archivos,
+            "horas": horas,
             "correos": correos
         }
+
 
     def delete(self):
         confirmar = messagebox.askyesno(
