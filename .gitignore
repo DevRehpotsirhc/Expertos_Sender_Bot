@@ -3,3 +3,4 @@ data.json
 .env
 cron.log
 build
+Reporte_**.sh
