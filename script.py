@@ -6,7 +6,7 @@ import smtplib
 from email.message import EmailMessage
 from datetime import datetime
 import os
-from utils import resource_path, base_path
+from utils import base_path
 
 
 
@@ -26,6 +26,55 @@ def enviar_correo(destinatarios, archivos_generados):
     msg["From"] = CORREO
     msg["To"] = ", ".join(destinatarios)
     msg["Subject"] = "Reporte de Servicios - Archivos generados"
+
+    cuerpo = []
+
+    for archivo in archivos_generados:
+        try:
+            with open(archivo, "r", encoding="utf-8") as f:
+                lineas = f.readlines()
+
+            cuerpo.append(f"===== {os.path.basename(archivo)} =====")
+
+            # Detectar encabezado y separadores
+            for linea in lineas:
+                raw = linea.rstrip("\n")
+
+                # Saltar líneas vacías
+                if not raw.strip():
+                    cuerpo.append("")
+                    continue
+
+                # Mantener la línea de separación tal cual
+                if set(raw) == {"-"} or {"|"}:
+                    cuerpo.append(raw)
+                    continue
+
+                # Separar columnas por |
+                if "|" in raw:
+                    cols = [c.strip() for c in raw.split("|")]
+                else:
+                    cols = raw.split()
+
+                # Tabular columnas
+                if len(cols) >= 3:
+                    col1 = cols[0].ljust(20)
+                    col2 = cols[1].ljust(30)
+                    col3 = cols[2].ljust(10)
+                    cuerpo.append(f"{col1}{col2}{col3}")
+                else:
+                    cuerpo.append(raw)
+
+            cuerpo.append("")
+
+        except:
+            cuerpo.append(f"===== {os.path.basename(archivo)} =====")
+            cuerpo.append("(No es archivo de texto)\n")
+
+    html = "<pre style='font-family: monospace; font-size: 13px;'>" + \
+       "\n".join(cuerpo) + "</pre>"
+
+    msg.add_alternative(html, subtype="html")
 
     for archivo in archivos_generados:
         with open(archivo, "rb") as f:
