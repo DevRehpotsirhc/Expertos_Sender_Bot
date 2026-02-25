@@ -169,7 +169,7 @@ def enviar_correo(destinatarios, archivos_generados):
     msg = EmailMessage()
     msg["From"] = CORREO
     msg["To"] = ", ".join(destinatarios)
-    msg["Subject"] = "Reporte de impresoras"
+    msg["Subject"] = "Reporte de Impresoras"
 
     cuerpo = []
     separador = "\n" + ("=" * 70) + "\n"
