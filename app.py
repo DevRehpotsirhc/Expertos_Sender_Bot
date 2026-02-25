@@ -1,12 +1,13 @@
+from requerimientos import show_reque
+from tkinter import messagebox
+from entorno import EnvWindow
+from utils import base_path
+from info import show_info
 from task import TaskItem
 import tkinter as tk
-from requerimientos import show_reque
-from info import show_info
-from entorno import EnvWindow
-from tkinter import messagebox
 import json
 import os
-from utils import resource_path, base_path
+
 
 
 CONFIG_FILE = base_path("data.json")
@@ -70,13 +71,16 @@ class App:
 
         self.load_tasks()
 
+
     def add_task(self, data=None):
         task = TaskItem(self.frame_tasks, data=data, on_delete=self.remove_task)
         task.frame.pack(pady=5, fill="x")
         self.tasks.append(task)
 
+
     def remove_task(self, task):
         self.tasks.remove(task)
+
 
     def save(self):
         data = []

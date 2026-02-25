@@ -1,11 +1,12 @@
-import os
 import sys
+import os
 
 
 
 def base_path(relative_path):
     base = os.path.dirname(os.path.abspath(sys.argv[0]))
     return os.path.join(base, relative_path)
+
 
 def resource_path(filename):
     if getattr(sys, 'frozen', False):

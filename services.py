@@ -1,11 +1,11 @@
-import os
-import json
-from dotenv import load_dotenv
-import subprocess
-import smtplib
 from email.message import EmailMessage
+from dotenv import load_dotenv
 from datetime import datetime
 from utils import base_path
+import subprocess
+import smtplib
+import json
+import os
 
 
 
@@ -19,6 +19,7 @@ PASS_APP = os.environ.get("PASS_APP")
 def ejecutar_script(ruta):
     res = subprocess.run(["bash", ruta], capture_output=True, text=True)
     return res.stdout.strip()
+
 
 def enviar_correo(destinatarios, archivos_generados):
     msg = EmailMessage()

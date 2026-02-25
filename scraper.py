@@ -1,12 +1,12 @@
-import os
-import json
-import smtplib
-from pathlib import Path
-from utils import base_path
-from datetime import datetime
-from dotenv import load_dotenv
-from email.message import EmailMessage
 from playwright.sync_api import sync_playwright, TimeoutError
+from email.message import EmailMessage
+from dotenv import load_dotenv
+from datetime import datetime
+from utils import base_path
+from pathlib import Path
+import smtplib
+import json
+import os
 
 
 
@@ -19,6 +19,7 @@ PASS_APP = os.environ.get("PASS_APP")
 RUTA = Path.home() / "Documents"
 with open(base_path("ipsdata.json"), "r") as f:
     IPS = json.load(f)
+
 
 def crear_archivos():
     rutas_generadas = []

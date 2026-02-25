@@ -1,6 +1,7 @@
-import tkinter as tk
 from tkinter import filedialog, messagebox
-import tkinter.ttk as ttk
+import tkinter as tk
+
+
 
 class TaskItem:
     def __init__(self, master, data=None, on_delete=None):
@@ -44,7 +45,6 @@ class TaskItem:
                 self.entry_correos.insert(0, ", ".join(data["correos"]))
             else:
                 self.entry_correos.insert(0, data["correos"])
-
 
 
     def seleccionar_archivo(self):

@@ -1,7 +1,9 @@
-import tkinter as tk
 from tkinter import messagebox
+from utils import base_path
+import tkinter as tk
 import os
-from utils import resource_path, base_path
+
+
 
 ENV_FILE = base_path(".env")
 print(ENV_FILE)
