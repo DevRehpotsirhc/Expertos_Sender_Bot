@@ -1,0 +1,20 @@
+[
+    {
+        "archivos": [
+            "ruta_1",
+            "ruta_2",
+            "..."
+        ],
+        "horas": [
+            "07:30", "12:30", "17:30"
+        ],
+        "hora_imp": [
+            "07:22"
+        ],
+        "correos": [
+            "correo1@correo.com",
+            "correo2@correo.com",
+            "..."
+        ]
+    }
+]

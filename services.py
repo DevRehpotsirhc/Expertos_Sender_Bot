@@ -17,11 +17,27 @@ PASS_APP = os.environ.get("PASS_APP")
 
 
 def ejecutar_script(ruta):
+    """_Función que lee un archivo .sh y lo ejecuta_
+
+    Args:
+        ruta: _dirección del archivo a ejecutar_
+
+    Returns:
+        _response_: _resultado del script_
+    """
     res = subprocess.run(["bash", ruta], capture_output=True, text=True)
     return res.stdout.strip()
 
 
 def enviar_correo(destinatarios, archivos_generados):
+    """_Función encargada de desglosar los
+    archivos generados en el cuerpo de un correo y
+    enviarlo a los destinatarios asignados_
+
+    Args:
+        destinatarios (_list_): _lista de correos_
+        archivos_generados (_list_): _lista de rutas_
+    """
     msg = EmailMessage()
     msg["From"] = CORREO
     msg["To"] = ", ".join(destinatarios)
@@ -91,6 +107,10 @@ def enviar_correo(destinatarios, archivos_generados):
 
 
 def execute_services():
+    """_Función que se encarga de ejecutar tanto el
+    script como el envío de correos si se cumple el
+    horario definido_
+    """
     hora = datetime.now().strftime("%H:%M")
 
     with open(DATA_FILE, "r") as f:

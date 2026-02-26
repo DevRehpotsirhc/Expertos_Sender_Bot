@@ -22,8 +22,17 @@ with open(base_path("ipsdata.json"), "r") as f:
 
 
 def crear_archivos():
+    """
+    _Esta función es la que toma las IPs,
+    extrae la información y la escribe
+    dentro de un archivo plano .txt_
+
+    ### Returns:
+        list: ruta de archivos generados
+    """
     rutas_generadas = []
     
+    # Conexión con palywright para hacer scraping
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
 
@@ -31,10 +40,12 @@ def crear_archivos():
             ip = ip_obj["ip"]
             print(f"Procesando {ip}...")
 
+            # Se crea la carpeta si no existe
             carpeta_ip = f"{RUTA}/{ip}"
             os.makedirs(carpeta_ip, exist_ok=True)
             archivo = f"{carpeta_ip}/info_dispositivo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
+            # Scrapeo
             try:
                 page = browser.new_page()
                 page.goto(f"http://{ip}")
@@ -47,6 +58,7 @@ def crear_archivos():
                 menu.wait_for()
                 menu.hover()
 
+                # Primera sección del archivo
                 item = frame.locator("ul.submenu a:has-text('Info dispositivo')")
                 item.wait_for()
                 item.click()
@@ -90,6 +102,7 @@ def crear_archivos():
                 menu.wait_for()
                 menu.hover()
 
+                # Segunda sección del archivo
                 item_contador = frame.locator("ul.submenu a:has-text('Contador')")
                 item_contador.wait_for()
                 item_contador.click()
@@ -134,6 +147,7 @@ def crear_archivos():
 
                         data_contador[key] = valor
                 
+                # Se crea el contador diario
                 total_actual = int(data_contador.get("General - Total", 0))
                 total_anterior = int(ip_obj.get("daily_count", 0))
                 total_dia = total_actual - total_anterior
@@ -166,6 +180,7 @@ def crear_archivos():
             finally:
                 rutas_generadas.append(archivo)
 
+        # Se actualiza en el archivo plano
         with open(base_path("ipsdata.json"), "w", encoding="utf-8") as f:
             json.dump(IPS, f, indent=4, ensure_ascii=False)
 
@@ -174,7 +189,15 @@ def crear_archivos():
     return rutas_generadas
 
 
-def enviar_correo(destinatarios, archivos_generados):
+def enviar_correo(destinatarios: list[str], archivos_generados: list[str]):
+    """_Función encargada de desglosar los
+    archivos generados en el cuerpo de un correo y
+    enviarlo a los destinatarios asignados_
+
+    Args:
+        destinatarios (_list_): _lista de correos_
+        archivos_generados (_list_): _lista de rutas_
+    """
     if not archivos_generados:
         return
 
@@ -186,6 +209,7 @@ def enviar_correo(destinatarios, archivos_generados):
     cuerpo = []
     separador = "\n" + ("=" * 70) + "\n"
 
+    # Recorre las rutas para extraer el contenido
     for archivo in archivos_generados:
         if not os.path.exists(archivo):
             print(f"Archivo no existe: {archivo}")
@@ -193,6 +217,7 @@ def enviar_correo(destinatarios, archivos_generados):
 
         ip = os.path.basename(os.path.dirname(archivo))
 
+        # Junta la información en un solo correo
         try:
             with open(archivo, "r", encoding="utf-8") as f:
                 lineas = f.readlines()
@@ -242,7 +267,12 @@ def enviar_correo(destinatarios, archivos_generados):
 
 
 def execute_scraper():
+    """_Función que se encarga de ejecutar tanto el
+    scraping como el envío de correos si se cumple el
+    horario definido_
+    """
     hora = datetime.now().strftime("%H:%M")
+    # dia = datetime.now().day
 
     with open(DATA_FILE, "r") as f:
         tareas = json.load(f)
@@ -254,9 +284,23 @@ def execute_scraper():
             if archivos_generados:
                 enviar_correo(t["correos"], archivos_generados)
                 print(f"Archivos enviados a {t['correos']}")
+        
+        # if dia == 1 and hora in t["hora_imp"]:
+        #     archivos_generados = crear_archivos()
+
+        #     if archivos_generados:
+        #         correo = "correo_persona"
+        #         enviar_correo(correo, archivos_generados)
+        #         print(f"Archivos enviados a {correo}")
 
 
 if __name__ == '__main__':
+    """_En caso de pruebas se puede ejecutar este archivo_
+
+    Advertencia:
+    Este archivo ejecuta un driver de chromium, el consumo
+    de recursos puede ser elevado según la tarea
+    """
     with open(DATA_FILE, "r") as f:
         tareas = json.load(f)
 
