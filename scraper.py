@@ -27,7 +27,8 @@ def crear_archivos():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
 
-        for ip in IPS:
+        for ip_obj in IPS:
+            ip = ip_obj["ip"]
             print(f"Procesando {ip}...")
 
             carpeta_ip = f"{RUTA}/{ip}"
@@ -132,7 +133,12 @@ def crear_archivos():
                             key = f"{seccion_actual} - {label}"
 
                         data_contador[key] = valor
+                
+                total_actual = int(data_contador.get("General - Total", 0))
+                total_anterior = int(ip_obj.get("daily_count", 0))
+                total_dia = total_actual - total_anterior
 
+                ip_obj["daily_count"] = total_actual
 
                 with open(archivo, "a", encoding="utf-8") as f:
                     f.write("\n=== CONTADOR ===\n")
@@ -142,7 +148,9 @@ def crear_archivos():
                         if "atrás" in str(k).lower():
                             continue
 
-                        f.write(f"{k}: {v}\n")  
+                        f.write(f"{k}: {v}\n")
+                    
+                    f.write(f"\nTotal en el día: {total_dia}\n")
                 
             except (TimeoutError, Exception):
                 with open(archivo, "w", encoding="utf-8") as f:
@@ -157,6 +165,9 @@ def crear_archivos():
 
             finally:
                 rutas_generadas.append(archivo)
+
+        with open(base_path("ipsdata.json"), "w", encoding="utf-8") as f:
+            json.dump(IPS, f, indent=4, ensure_ascii=False)
 
         browser.close()
         
